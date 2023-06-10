@@ -29,6 +29,7 @@ export const getUserInputs = async (reader: any): Promise<any> => {
     const height = await askQuestion(reader, 'Enter height: ');
     const color = await askQuestion(reader, 'Enter color: ');
     const size = await askQuestion(reader, 'Enter size: ');
+    const filename = await askQuestion(reader, 'Enter file name to save image: ');
 
     return {
         greeting: greeting || 'Hello',
@@ -36,6 +37,7 @@ export const getUserInputs = async (reader: any): Promise<any> => {
         width: Number(width) || 400,
         height: Number(height) || 500,
         color: color || 'Pink',
-        size: Number(size) || 100,
+        size: Number(size),
+        filename: filename || 'cat-card'
     };
 };

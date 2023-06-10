@@ -5,4 +5,5 @@ interface CatCardOptions {
     height?: number;
     color?: string;
     size?: number;
+    filename?: string;
   }
