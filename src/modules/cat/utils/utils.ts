@@ -1,43 +1,31 @@
-import { Interface } from "readline";
+import { promisify } from 'util';
+import fs from 'fs';
+import { ReadLine } from 'readline';
 
-const fs = require('fs');
+const writeFileAsync = promisify(fs.writeFile);
 
-export const saveImageToFile = (buffer: any, filePath: string): Promise<boolean> =>
-    new Promise<boolean>((resolve, reject) => {
-        fs.writeFile(filePath, buffer, 'binary', (err: any) => {
-            if (err) {
-                reject(err);
-            } else {
-                console.log('The file was saved!');
-                resolve(true);
-            }
+export const saveImageToFile = (filePath: string, buffer: Buffer): Promise<boolean> =>
+    writeFileAsync(filePath, buffer, 'binary')
+        .then(() => {
+            console.log('The file was saved!');
+            return true;
+        })
+        .catch((err: any) => {
+            throw new Error(`Failed to save image to file: ${err}`);
         });
-    });
 
 
-const askQuestion = (reader: Interface, question: string): Promise<string> =>
-    new Promise<string>((resolve) => {
-        reader.question(question, (answer: any) => {
-            resolve(answer);
-        });
-    });
+export const getUserInputs = async (reader: ReadLine): Promise<any> => {
+    const question = promisify(reader.question).bind(reader);
 
-export const getUserInputs = async (reader: any): Promise<any> => {
-    const greeting = await askQuestion(reader, 'Enter greeting: ');
-    const who = await askQuestion(reader, 'Enter who: ');
-    const width = await askQuestion(reader, 'Enter width: ');
-    const height = await askQuestion(reader, 'Enter height: ');
-    const color = await askQuestion(reader, 'Enter color: ');
-    const size = await askQuestion(reader, 'Enter size: ');
-    const filename = await askQuestion(reader, 'Enter file name to save image: ');
+    const greeting = await question('Enter greeting: ');
+    const who = await question('Enter who: ');
+    const width = await question('Enter width: ');
+    const height = await question('Enter height: ');
+    const color = await question('Enter color: ');
+    const size = await question('Enter size: ');
+    const filename = await question('Enter file name to save image: ');
 
-    return {
-        greeting: greeting || 'Hello',
-        who: who || 'You',
-        width: Number(width) || 400,
-        height: Number(height) || 500,
-        color: color || 'Pink',
-        size: Number(size),
-        filename: filename || 'cat-card'
-    };
+    const inputs = { greeting, who, width, height, color, size, filename, };
+    return inputs;
 };
