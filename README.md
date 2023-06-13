@@ -2,6 +2,10 @@
 
 Fetches an image of a cat with some custom text.Fetches an image of another cat with some more custom text.Binds these images together into one image. Saves the resulting image as a file
 
+## Software Requirements
+
+- Node version >= 14.20.0
+- NPM version >= 6.14.17
 
 ## Run Locally
 
