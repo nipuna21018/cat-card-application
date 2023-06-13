@@ -10,7 +10,7 @@ export const saveImageToFile = (filePath: string, buffer: Buffer): Promise<boole
             console.log('The file was saved!');
             return true;
         })
-        .catch((err: any) => {
+        .catch((err: Error) => {
             throw new Error(`Failed to save image to file: ${err}`);
         });
 
